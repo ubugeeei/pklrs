@@ -1,0 +1,20 @@
+[package]
+name = "pkl"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Rust bindings for Apple Pkl configuration language"
+
+[features]
+default = ["sync"]
+sync = []
+async = ["dep:tokio"]
+
+[dependencies]
+rmpv = { version = "1", features = ["with-serde"] }
+rmp-serde = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+byteorder = "1"
+tokio = { version = "1", features = ["process", "io-util", "sync", "rt-multi-thread", "macros"], optional = true }

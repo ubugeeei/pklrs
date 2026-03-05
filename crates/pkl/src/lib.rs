@@ -1,3 +1,5 @@
+pub use pkl_derive::pkl;
+
 pub mod codec;
 pub mod de;
 pub mod decoder;
@@ -22,3 +24,16 @@ pub use module_source::ModuleSource;
 pub use reader::{ModuleReader, ResourceReader};
 pub use types::{DataSize, DataSizeUnit, Duration, DurationUnit, IntSeq, Pair, PklRegex};
 pub use value::{ObjectMember, PklValue};
+
+/// One-shot evaluation of inline PKL text.
+///
+/// Creates a temporary evaluator, evaluates the text, and returns the result.
+pub fn evaluate_text(text: &str) -> Result<PklValue> {
+    let mut manager = EvaluatorManager::new()?;
+    let opts = EvaluatorOptions::preconfigured();
+    let evaluator = manager.new_evaluator(opts)?;
+    let source = ModuleSource::text(text);
+    let result = manager.evaluate_module(&evaluator, source);
+    let _ = manager.close_evaluator(&evaluator);
+    result
+}

@@ -9,7 +9,7 @@ This library communicates with `pkl server` via MessagePack IPC, providing a nat
 | Crate | Description |
 |-------|-------------|
 | `pkl` | Core library — IPC protocol, pkl-binary decoder, serde Deserializer |
-| `pkl-derive` | `#[derive(FromPkl)]` proc-macro |
+| `pkl-derive` | `#[derive(FromPkl)]` and `pkl!` proc-macros |
 | `pkl-codegen` | CLI tool (`pkl-gen-rust`) to generate Rust structs from `.pkl` schemas |
 
 ## Quick Start
@@ -46,6 +46,62 @@ fn main() -> Result<(), pkl::Error> {
     Ok(())
 }
 ```
+
+### `pkl!` macro
+
+Write PKL configuration as tokens directly in Rust — no string literals needed:
+
+```rust
+use pkl::pkl;
+
+fn main() -> Result<(), pkl::Error> {
+    let value = pkl! {
+        host = "localhost"
+        port = 8080
+        database {
+            url = "postgres://localhost/mydb"
+            maxConnections = 10
+        }
+    }?;
+
+    println!("{value:#?}");
+    Ok(())
+}
+```
+
+The macro supports most PKL constructs:
+
+```rust
+let value = pkl! {
+    // Classes and type annotations
+    class Server {
+        host: String
+        port: UInt16
+    }
+
+    // Functions
+    function double(x) = x * 2
+
+    // Modifiers
+    local basePort = 8000
+
+    // Duration and data size units
+    timeout = 30.s
+    maxSize = 512.mb
+
+    // Control flow
+    port = if (debug) 3000 else 8080
+
+    // Operators
+    items = data |> filter(it > 0)
+    name = input ?? "default"
+    valid = value is String
+}?;
+```
+
+> **Limitations:** PKL raw strings (`#"..."#`), string interpolation (`\(expr)`),
+> and multi-line strings (`"""..."""`) are not supported in the macro.
+> Use `ModuleSource::text(...)` with a raw string literal for these cases.
 
 You can also evaluate `.pkl` files directly:
 

@@ -193,6 +193,7 @@ name = "pkl"
 version = "0.1.0"
 dependencies = [
  "byteorder",
+ "pkl-derive",
  "rmp-serde",
  "rmpv",
  "serde",

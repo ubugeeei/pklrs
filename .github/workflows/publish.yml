@@ -22,8 +22,18 @@ jobs:
       - uses: Swatinem/rust-cache@v2
 
       # Publish in dependency order: pklrust-derive -> pklrust -> pklrust-codegen
+      - name: Get OIDC token for pklrust-derive
+        id: oidc-derive
+        run: |
+          OIDC_TOKEN=$(curl -sLS "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=crates.io" -H "User-Agent: actions/oidc-client" -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" | jq -r '.value')
+          CRATES_IO_TOKEN=$(curl -sLS 'https://crates.io/api/v1/trusted_publishing/tokens' -H 'Content-Type: application/json' -d "{\"oidc_token\": \"$OIDC_TOKEN\"}" | jq -r '.token')
+          echo "::add-mask::$CRATES_IO_TOKEN"
+          echo "token=$CRATES_IO_TOKEN" >> "$GITHUB_OUTPUT"
+
       - name: Publish pklrust-derive
         run: cargo publish -p pklrust-derive
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ steps.oidc-derive.outputs.token }}
 
       - name: Wait for pklrust-derive to be available
         run: |
@@ -33,8 +43,18 @@ jobs:
             sleep 5
           done
 
+      - name: Get OIDC token for pklrust
+        id: oidc-pklrust
+        run: |
+          OIDC_TOKEN=$(curl -sLS "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=crates.io" -H "User-Agent: actions/oidc-client" -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" | jq -r '.value')
+          CRATES_IO_TOKEN=$(curl -sLS 'https://crates.io/api/v1/trusted_publishing/tokens' -H 'Content-Type: application/json' -d "{\"oidc_token\": \"$OIDC_TOKEN\"}" | jq -r '.token')
+          echo "::add-mask::$CRATES_IO_TOKEN"
+          echo "token=$CRATES_IO_TOKEN" >> "$GITHUB_OUTPUT"
+
       - name: Publish pklrust
         run: cargo publish -p pklrust
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ steps.oidc-pklrust.outputs.token }}
 
       - name: Wait for pklrust to be available
         run: |
@@ -44,5 +64,15 @@ jobs:
             sleep 5
           done
 
+      - name: Get OIDC token for pklrust-codegen
+        id: oidc-codegen
+        run: |
+          OIDC_TOKEN=$(curl -sLS "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=crates.io" -H "User-Agent: actions/oidc-client" -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" | jq -r '.value')
+          CRATES_IO_TOKEN=$(curl -sLS 'https://crates.io/api/v1/trusted_publishing/tokens' -H 'Content-Type: application/json' -d "{\"oidc_token\": \"$OIDC_TOKEN\"}" | jq -r '.token')
+          echo "::add-mask::$CRATES_IO_TOKEN"
+          echo "token=$CRATES_IO_TOKEN" >> "$GITHUB_OUTPUT"
+
       - name: Publish pklrust-codegen
         run: cargo publish -p pklrust-codegen
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ steps.oidc-codegen.outputs.token }}

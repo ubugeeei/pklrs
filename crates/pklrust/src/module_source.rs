@@ -14,8 +14,8 @@ pub enum ModuleSource {
 impl ModuleSource {
     /// Create a ModuleSource from a file path.
     pub fn file(path: impl AsRef<Path>) -> Self {
-        let abs = std::fs::canonicalize(path.as_ref())
-            .unwrap_or_else(|_| path.as_ref().to_path_buf());
+        let abs =
+            std::fs::canonicalize(path.as_ref()).unwrap_or_else(|_| path.as_ref().to_path_buf());
         Self::File(abs.display().to_string())
     }
 

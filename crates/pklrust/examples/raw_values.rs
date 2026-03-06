@@ -27,10 +27,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 PklValue::Int(n) => println!("{key} = {n}"),
                 PklValue::Bool(b) => println!("{key} = {b}"),
                 PklValue::List(items) => {
-                    let strs: Vec<_> = items
-                        .iter()
-                        .filter_map(|v| v.as_str())
-                        .collect();
+                    let strs: Vec<_> = items.iter().filter_map(|v| v.as_str()).collect();
                     println!("{key} = {strs:?}");
                 }
                 other => println!("{key} = {other:?}"),

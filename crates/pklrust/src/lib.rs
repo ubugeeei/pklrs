@@ -16,12 +16,12 @@ pub mod value;
 
 pub use de::from_pkl_value;
 pub use decoder::decode_pkl_binary;
-pub use ser::to_pkl_value;
 pub use error::{Error, Result};
 pub use evaluator::{Evaluator, EvaluatorManager};
 pub use evaluator_options::EvaluatorOptions;
 pub use module_source::ModuleSource;
 pub use reader::{ModuleReader, ResourceReader};
+pub use ser::to_pkl_value;
 pub use types::{DataSize, DataSizeUnit, Duration, DurationUnit, IntSeq, Pair, PklRegex};
 pub use value::{ObjectMember, PklValue};
 

@@ -12,13 +12,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("{value:#?}");
 
     // You can also deserialize the result
-    let name = pklrust::from_pkl_value::<String>(
-        value
-            .as_properties()
-            .unwrap()
-            .get("name")
-            .unwrap(),
-    )?;
+    let name =
+        pklrust::from_pkl_value::<String>(value.as_properties().unwrap().get("name").unwrap())?;
     println!("name = {name}");
 
     Ok(())

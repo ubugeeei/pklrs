@@ -133,17 +133,11 @@ impl<'de> serde::Deserializer<'de> for PklDeserializer<'de> {
         }
     }
 
-    fn deserialize_map<V: Visitor<'de>>(
-        self,
-        visitor: V,
-    ) -> Result<V::Value, Self::Error> {
+    fn deserialize_map<V: Visitor<'de>>(self, visitor: V) -> Result<V::Value, Self::Error> {
         self.deserialize_any(visitor)
     }
 
-    fn deserialize_seq<V: Visitor<'de>>(
-        self,
-        visitor: V,
-    ) -> Result<V::Value, Self::Error> {
+    fn deserialize_seq<V: Visitor<'de>>(self, visitor: V) -> Result<V::Value, Self::Error> {
         self.deserialize_any(visitor)
     }
 
@@ -358,10 +352,7 @@ struct DurationMapAccess<'de> {
 
 impl<'de> DurationMapAccess<'de> {
     fn new(duration: &'de crate::types::Duration) -> Self {
-        Self {
-            duration,
-            state: 0,
-        }
+        Self { duration, state: 0 }
     }
 }
 
@@ -452,9 +443,7 @@ impl<'de> MapAccess<'de> for DataSizeMapAccess<'de> {
         match self.state {
             1 => {
                 self.state = 2;
-                seed.deserialize(serde::de::value::F64Deserializer::new(
-                    self.data_size.value,
-                ))
+                seed.deserialize(serde::de::value::F64Deserializer::new(self.data_size.value))
             }
             3 => {
                 self.state = 4;
@@ -538,10 +527,7 @@ mod tests {
     fn test_deserialize_primitives() {
         assert_eq!(from_pkl_value::<bool>(&PklValue::Bool(true)).unwrap(), true);
         assert_eq!(from_pkl_value::<i64>(&PklValue::Int(42)).unwrap(), 42);
-        assert_eq!(
-            from_pkl_value::<f64>(&PklValue::Float(3.14)).unwrap(),
-            3.14
-        );
+        assert_eq!(from_pkl_value::<f64>(&PklValue::Float(3.14)).unwrap(), 3.14);
         assert_eq!(
             from_pkl_value::<String>(&PklValue::String("hello".into())).unwrap(),
             "hello"

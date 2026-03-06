@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::message::{ProjectOrDependency};
+use crate::message::ProjectOrDependency;
 use crate::reader::{ModuleReader, ResourceReader};
 
 /// Options for creating a new evaluator.

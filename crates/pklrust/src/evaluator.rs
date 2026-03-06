@@ -147,8 +147,7 @@ impl EvaluatorManager {
             expr: expr.map(|s| s.to_string()),
         };
 
-        self.process
-            .send(&OutgoingMessage::EvaluateRequest(req))?;
+        self.process.send(&OutgoingMessage::EvaluateRequest(req))?;
 
         // Message loop: handle log messages and reader requests until we get the response
         loop {
@@ -199,11 +198,7 @@ impl EvaluatorManager {
         evaluator: &Evaluator,
         req: &ReadResourceRequest,
     ) -> Result<()> {
-        let scheme = req
-            .uri
-            .split(':')
-            .next()
-            .unwrap_or("");
+        let scheme = req.uri.split(':').next().unwrap_or("");
 
         let result = evaluator
             .resource_readers
@@ -236,11 +231,7 @@ impl EvaluatorManager {
             .send(&OutgoingMessage::ReadResourceResponse(resp))
     }
 
-    fn handle_read_module(
-        &mut self,
-        evaluator: &Evaluator,
-        req: &ReadModuleRequest,
-    ) -> Result<()> {
+    fn handle_read_module(&mut self, evaluator: &Evaluator, req: &ReadModuleRequest) -> Result<()> {
         let scheme = req.uri.split(':').next().unwrap_or("");
 
         let result = evaluator

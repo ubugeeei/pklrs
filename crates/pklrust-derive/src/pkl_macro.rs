@@ -41,7 +41,10 @@ impl Last {
     fn is_value_like(self) -> bool {
         matches!(
             self,
-            Last::Ident { continuation: false } | Last::Literal | Last::CloseDelim
+            Last::Ident {
+                continuation: false
+            } | Last::Literal
+                | Last::CloseDelim
         )
     }
 }
@@ -52,17 +55,38 @@ impl Last {
 /// keywords marked as "infix" still don't get a newline.
 const CONTINUATION_KEYWORDS: &[&str] = &[
     // Modifiers
-    "local", "hidden", "fixed", "const", "open", "abstract", "external",
+    "local",
+    "hidden",
+    "fixed",
+    "const",
+    "open",
+    "abstract",
+    "external",
     // Declarations
-    "class", "typealias", "function", "module",
+    "class",
+    "typealias",
+    "function",
+    "module",
     // Expressions / operators
-    "new", "as", "is", "in", "not",
+    "new",
+    "as",
+    "is",
+    "in",
+    "not",
     // Control flow
-    "if", "else", "for", "when", "let",
+    "if",
+    "else",
+    "for",
+    "when",
+    "let",
     // Module header
-    "amends", "extends", "import",
+    "amends",
+    "extends",
+    "import",
     // Built-ins that take an expression
-    "throw", "trace", "read",
+    "throw",
+    "trace",
+    "read",
 ];
 
 /// Keywords that can appear *after* a value-like token without starting
@@ -335,9 +359,7 @@ mod tests {
 
     #[test]
     fn multiple_classes() {
-        let result = pkl(
-            r#"class Server { host: String }  class Database { url: String }"#,
-        );
+        let result = pkl(r#"class Server { host: String }  class Database { url: String }"#);
         assert!(result.contains("}\nclass Database"), "got: {result}");
     }
 

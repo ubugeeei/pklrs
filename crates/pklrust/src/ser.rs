@@ -163,11 +163,7 @@ impl ser::Serializer for PklSerializer {
         })
     }
 
-    fn serialize_struct(
-        self,
-        _name: &'static str,
-        len: usize,
-    ) -> Result<SerializeStruct, Error> {
+    fn serialize_struct(self, _name: &'static str, len: usize) -> Result<SerializeStruct, Error> {
         Ok(SerializeStruct {
             members: Vec::with_capacity(len),
         })
@@ -274,10 +270,9 @@ impl ser::SerializeMap for SerializeMap {
     }
 
     fn serialize_value<T: ?Sized + Serialize>(&mut self, value: &T) -> Result<(), Error> {
-        let key = self
-            .pending_key
-            .take()
-            .ok_or_else(|| Error::Deserialize("serialize_value called before serialize_key".into()))?;
+        let key = self.pending_key.take().ok_or_else(|| {
+            Error::Deserialize("serialize_value called before serialize_key".into())
+        })?;
         self.entries.push((key, value.serialize(PklSerializer)?));
         Ok(())
     }
@@ -347,10 +342,7 @@ impl ser::SerializeStructVariant for SerializeStructVariant {
             module_uri: String::new(),
             members: self.members,
         };
-        Ok(PklValue::Map(vec![(
-            PklValue::String(self.variant),
-            inner,
-        )]))
+        Ok(PklValue::Map(vec![(PklValue::String(self.variant), inner)]))
     }
 }
 

@@ -1,4 +1,4 @@
-use crate::message::{PathElement};
+use crate::message::PathElement;
 
 /// A custom module reader that can resolve modules by URI scheme.
 pub trait ModuleReader: Send + Sync {

@@ -8,27 +8,34 @@ use crate::message::*;
 /// Encode an outgoing message as a 2-element MessagePack array: [type_code, body_map].
 pub fn encode_message<W: Write>(writer: &mut W, msg: &OutgoingMessage) -> Result<()> {
     let (code, body) = match msg {
-        OutgoingMessage::CreateEvaluatorRequest(req) => {
-            (MessageCode::CreateEvaluatorRequest as u8, encode_create_evaluator_request(req))
-        }
-        OutgoingMessage::CloseEvaluator(req) => {
-            (MessageCode::CloseEvaluator as u8, encode_close_evaluator(req))
-        }
-        OutgoingMessage::EvaluateRequest(req) => {
-            (MessageCode::EvaluateRequest as u8, encode_evaluate_request(req))
-        }
-        OutgoingMessage::ReadResourceResponse(resp) => {
-            (MessageCode::ReadResourceResponse as u8, encode_read_resource_response(resp))
-        }
-        OutgoingMessage::ReadModuleResponse(resp) => {
-            (MessageCode::ReadModuleResponse as u8, encode_read_module_response(resp))
-        }
-        OutgoingMessage::ListResourcesResponse(resp) => {
-            (MessageCode::ListResourcesResponse as u8, encode_list_resources_response(resp))
-        }
-        OutgoingMessage::ListModulesResponse(resp) => {
-            (MessageCode::ListModulesResponse as u8, encode_list_modules_response(resp))
-        }
+        OutgoingMessage::CreateEvaluatorRequest(req) => (
+            MessageCode::CreateEvaluatorRequest as u8,
+            encode_create_evaluator_request(req),
+        ),
+        OutgoingMessage::CloseEvaluator(req) => (
+            MessageCode::CloseEvaluator as u8,
+            encode_close_evaluator(req),
+        ),
+        OutgoingMessage::EvaluateRequest(req) => (
+            MessageCode::EvaluateRequest as u8,
+            encode_evaluate_request(req),
+        ),
+        OutgoingMessage::ReadResourceResponse(resp) => (
+            MessageCode::ReadResourceResponse as u8,
+            encode_read_resource_response(resp),
+        ),
+        OutgoingMessage::ReadModuleResponse(resp) => (
+            MessageCode::ReadModuleResponse as u8,
+            encode_read_module_response(resp),
+        ),
+        OutgoingMessage::ListResourcesResponse(resp) => (
+            MessageCode::ListResourcesResponse as u8,
+            encode_list_resources_response(resp),
+        ),
+        OutgoingMessage::ListModulesResponse(resp) => (
+            MessageCode::ListModulesResponse as u8,
+            encode_list_modules_response(resp),
+        ),
     };
 
     let envelope = Value::Array(vec![Value::from(code as u64), body]);
@@ -54,27 +61,25 @@ pub fn decode_message<R: Read>(reader: &mut R) -> Result<IncomingMessage> {
     let body = &arr[1];
 
     match MessageCode::from_u8(code) {
-        Some(MessageCode::CreateEvaluatorResponse) => {
-            Ok(IncomingMessage::CreateEvaluatorResponse(decode_create_evaluator_response(body)?))
-        }
-        Some(MessageCode::EvaluateResponse) => {
-            Ok(IncomingMessage::EvaluateResponse(decode_evaluate_response(body)?))
-        }
-        Some(MessageCode::LogMessage) => {
-            Ok(IncomingMessage::LogMessage(decode_log_message(body)?))
-        }
-        Some(MessageCode::ReadResourceRequest) => {
-            Ok(IncomingMessage::ReadResourceRequest(decode_read_resource_request(body)?))
-        }
-        Some(MessageCode::ReadModuleRequest) => {
-            Ok(IncomingMessage::ReadModuleRequest(decode_read_module_request(body)?))
-        }
-        Some(MessageCode::ListResourcesRequest) => {
-            Ok(IncomingMessage::ListResourcesRequest(decode_list_resources_request(body)?))
-        }
-        Some(MessageCode::ListModulesRequest) => {
-            Ok(IncomingMessage::ListModulesRequest(decode_list_modules_request(body)?))
-        }
+        Some(MessageCode::CreateEvaluatorResponse) => Ok(IncomingMessage::CreateEvaluatorResponse(
+            decode_create_evaluator_response(body)?,
+        )),
+        Some(MessageCode::EvaluateResponse) => Ok(IncomingMessage::EvaluateResponse(
+            decode_evaluate_response(body)?,
+        )),
+        Some(MessageCode::LogMessage) => Ok(IncomingMessage::LogMessage(decode_log_message(body)?)),
+        Some(MessageCode::ReadResourceRequest) => Ok(IncomingMessage::ReadResourceRequest(
+            decode_read_resource_request(body)?,
+        )),
+        Some(MessageCode::ReadModuleRequest) => Ok(IncomingMessage::ReadModuleRequest(
+            decode_read_module_request(body)?,
+        )),
+        Some(MessageCode::ListResourcesRequest) => Ok(IncomingMessage::ListResourcesRequest(
+            decode_list_resources_request(body)?,
+        )),
+        Some(MessageCode::ListModulesRequest) => Ok(IncomingMessage::ListModulesRequest(
+            decode_list_modules_request(body)?,
+        )),
         _ => Err(Error::UnexpectedMessageType(code)),
     }
 }
@@ -188,8 +193,10 @@ fn encode_create_evaluator_request(req: &CreateEvaluatorRequest) -> Value {
         map_insert(&mut entries, "env", Value::Map(m));
     }
     if let Some(ref props) = req.properties {
-        let m: Vec<(Value, Value)> =
-            props.iter().map(|(k, v)| (str_val(k), str_val(v))).collect();
+        let m: Vec<(Value, Value)> = props
+            .iter()
+            .map(|(k, v)| (str_val(k), str_val(v)))
+            .collect();
         map_insert(&mut entries, "properties", Value::Map(m));
     }
     if let Some(timeout) = req.timeout_seconds {
@@ -295,11 +302,7 @@ fn encode_read_resource_response(resp: &ReadResourceResponse) -> Value {
     map_insert(&mut entries, "requestId", int_val(resp.request_id));
     map_insert(&mut entries, "evaluatorId", int_val(resp.evaluator_id));
     if let Some(ref contents) = resp.contents {
-        map_insert(
-            &mut entries,
-            "contents",
-            Value::Binary(contents.clone()),
-        );
+        map_insert(&mut entries, "contents", Value::Binary(contents.clone()));
     }
     if let Some(ref error) = resp.error {
         map_insert(&mut entries, "error", str_val(error));

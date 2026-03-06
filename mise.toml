@@ -25,11 +25,11 @@ NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}"
 echo "Bumping version: ${CURRENT} -> ${NEW_VERSION}"
 
 # Update workspace version
-sed -i.bak "s/^version = \"${CURRENT}\"/version = \"${NEW_VERSION}\"/" Cargo.toml
+sed -i.bak 's/^version = "'"${CURRENT}"'"/version = "'"${NEW_VERSION}"'"/' Cargo.toml
 rm -f Cargo.toml.bak
 
 # Update pklrust-derive version in pklrust dependency
-sed -i.bak "s/pklrust-derive = { version = \"${CURRENT}\"/pklrust-derive = { version = \"${NEW_VERSION}\"/" crates/pklrust/Cargo.toml
+sed -i.bak 's/pklrust-derive = { version = "'"${CURRENT}"'"/pklrust-derive = { version = "'"${NEW_VERSION}"'"/' crates/pklrust/Cargo.toml
 rm -f crates/pklrust/Cargo.toml.bak
 
 # Update Cargo.lock

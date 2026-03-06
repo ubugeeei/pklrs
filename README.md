@@ -1,4 +1,6 @@
-# pklrs
+# pklrust
+
+> Pronounced "Pickles" -- as in the food.
 
 Rust bindings for [Apple Pkl](https://pkl-lang.org/) — a configuration-as-code language.
 
@@ -8,20 +10,20 @@ This library communicates with `pkl server` via MessagePack IPC, providing a nat
 
 | Crate | Description |
 |-------|-------------|
-| `pkl` | Core library — IPC protocol, pkl-binary decoder, serde Deserializer |
-| `pkl-derive` | `#[derive(FromPkl)]` and `pkl!` proc-macros |
-| `pkl-codegen` | CLI tool (`pkl-gen-rust`) to generate Rust structs from `.pkl` schemas |
+| `pklrust` | Core library — IPC protocol, pkl-binary decoder, serde Deserializer |
+| `pklrust-derive` | `#[derive(FromPkl)]` and `pkl!` proc-macros |
+| `pklrust-codegen` | CLI tool (`pkl-gen-rust`) to generate Rust structs from `.pkl` schemas |
 
 ## Quick Start
 
 ```toml
 [dependencies]
-pkl = "0.1"
+pklrust = "0.1"
 serde = { version = "1", features = ["derive"] }
 ```
 
 ```rust
-use pkl::{EvaluatorManager, EvaluatorOptions, ModuleSource};
+use pklrust::{EvaluatorManager, EvaluatorOptions, ModuleSource};
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
@@ -30,7 +32,7 @@ struct Server {
     port: i64,
 }
 
-fn main() -> Result<(), pkl::Error> {
+fn main() -> Result<(), pklrust::Error> {
     let mut manager = EvaluatorManager::new()?;
     let evaluator = manager.new_evaluator(EvaluatorOptions::preconfigured())?;
 
@@ -52,9 +54,9 @@ fn main() -> Result<(), pkl::Error> {
 Write PKL configuration as tokens directly in Rust — no string literals needed:
 
 ```rust
-use pkl::pkl;
+use pklrust::pkl;
 
-fn main() -> Result<(), pkl::Error> {
+fn main() -> Result<(), pklrust::Error> {
     let value = pkl! {
         host = "localhost"
         port = 8080
@@ -131,7 +133,7 @@ brew install pkl
 Generate Rust types from Pkl schema files:
 
 ```sh
-cargo install pkl-codegen
+cargo install pklrust-codegen
 pkl-gen-rust schema.pkl -o src/generated/
 ```
 

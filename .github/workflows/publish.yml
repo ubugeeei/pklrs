@@ -20,28 +20,28 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
 
-      # Publish in dependency order: pklrs-derive -> pklrs -> pklrs-codegen
-      - name: Publish pklrs-derive
-        run: cargo publish -p pklrs-derive
+      # Publish in dependency order: pklrust-derive -> pklrust -> pklrust-codegen
+      - name: Publish pklrust-derive
+        run: cargo publish -p pklrust-derive
 
-      - name: Wait for pklrs-derive to be available
+      - name: Wait for pklrust-derive to be available
         run: |
-          VERSION=$(cargo metadata --no-deps --format-version 1 | jq -r '.packages[] | select(.name == "pklrs-derive") | .version')
-          until curl -sf "https://crates.io/api/v1/crates/pklrs-derive/$VERSION" > /dev/null; do
-            echo "Waiting for pklrs-derive $VERSION on crates.io..."
+          VERSION=$(cargo metadata --no-deps --format-version 1 | jq -r '.packages[] | select(.name == "pklrust-derive") | .version')
+          until curl -sf "https://crates.io/api/v1/crates/pklrust-derive/$VERSION" > /dev/null; do
+            echo "Waiting for pklrust-derive $VERSION on crates.io..."
             sleep 5
           done
 
-      - name: Publish pklrs
-        run: cargo publish -p pklrs
+      - name: Publish pklrust
+        run: cargo publish -p pklrust
 
-      - name: Wait for pklrs to be available
+      - name: Wait for pklrust to be available
         run: |
-          VERSION=$(cargo metadata --no-deps --format-version 1 | jq -r '.packages[] | select(.name == "pklrs") | .version')
-          until curl -sf "https://crates.io/api/v1/crates/pklrs/$VERSION" > /dev/null; do
-            echo "Waiting for pklrs $VERSION on crates.io..."
+          VERSION=$(cargo metadata --no-deps --format-version 1 | jq -r '.packages[] | select(.name == "pklrust") | .version')
+          until curl -sf "https://crates.io/api/v1/crates/pklrust/$VERSION" > /dev/null; do
+            echo "Waiting for pklrust $VERSION on crates.io..."
             sleep 5
           done
 
-      - name: Publish pklrs-codegen
-        run: cargo publish -p pklrs-codegen
+      - name: Publish pklrust-codegen
+        run: cargo publish -p pklrust-codegen

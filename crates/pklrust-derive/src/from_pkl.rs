@@ -74,14 +74,14 @@ pub(crate) fn impl_from_pkl(input: &DeriveInput) -> TokenStream {
 
     quote! {
         impl #impl_generics #name #ty_generics #where_clause {
-            /// Deserialize from a `pklrs::PklValue`.
-            pub fn from_pkl_value(value: &::pklrs::PklValue) -> ::std::result::Result<Self, ::pklrs::Error> {
+            /// Deserialize from a `pklrust::PklValue`.
+            pub fn from_pkl_value(value: &::pklrust::PklValue) -> ::std::result::Result<Self, ::pklrust::Error> {
                 #[derive(::serde::Deserialize)]
                 struct __Shadow #ty_generics #where_clause {
                     #(#field_defs,)*
                 }
 
-                let __shadow: __Shadow = ::pklrs::from_pkl_value(value)?;
+                let __shadow: __Shadow = ::pklrust::from_pkl_value(value)?;
                 Ok(Self {
                     #(#field_assignments,)*
                 })

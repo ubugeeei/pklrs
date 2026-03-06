@@ -1,5 +1,5 @@
 /// One-shot evaluation with `evaluate_text` — no manual manager setup needed.
-use pklrs::evaluate_text;
+use pklrust::evaluate_text;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let value = evaluate_text(
@@ -12,7 +12,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("{value:#?}");
 
     // You can also deserialize the result
-    let name = pklrs::from_pkl_value::<String>(
+    let name = pklrust::from_pkl_value::<String>(
         value
             .as_properties()
             .unwrap()

@@ -2,7 +2,7 @@
 ///
 /// Useful when you need dynamic access to PKL data or want to
 /// inspect the structure before deserializing.
-use pklrs::{EvaluatorManager, EvaluatorOptions, ModuleSource, PklValue};
+use pklrust::{EvaluatorManager, EvaluatorOptions, ModuleSource, PklValue};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut manager = EvaluatorManager::new()?;

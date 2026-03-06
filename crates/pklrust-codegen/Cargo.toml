@@ -1,5 +1,5 @@
 [package]
-name = "pklrs-codegen"
+name = "pklrust-codegen"
 version.workspace = true
 edition.workspace = true
 license.workspace = true

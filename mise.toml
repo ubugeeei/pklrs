@@ -10,7 +10,7 @@ set -euo pipefail
 BUMP="${1:-patch}"
 
 # Get current version
-CURRENT=$(cargo metadata --no-deps --format-version 1 | jq -r '.packages[] | select(.name == "pklrs") | .version')
+CURRENT=$(cargo metadata --no-deps --format-version 1 | jq -r '.packages[] | select(.name == "pklrust") | .version')
 
 IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT"
 
@@ -28,9 +28,9 @@ echo "Bumping version: ${CURRENT} -> ${NEW_VERSION}"
 sed -i.bak "s/^version = \"${CURRENT}\"/version = \"${NEW_VERSION}\"/" Cargo.toml
 rm -f Cargo.toml.bak
 
-# Update pklrs-derive version in pklrs dependency
-sed -i.bak "s/pklrs-derive = { version = \"${CURRENT}\"/pklrs-derive = { version = \"${NEW_VERSION}\"/" crates/pklrs/Cargo.toml
-rm -f crates/pklrs/Cargo.toml.bak
+# Update pklrust-derive version in pklrust dependency
+sed -i.bak "s/pklrust-derive = { version = \"${CURRENT}\"/pklrust-derive = { version = \"${NEW_VERSION}\"/" crates/pklrust/Cargo.toml
+rm -f crates/pklrust/Cargo.toml.bak
 
 # Update Cargo.lock
 cargo check --workspace 2>/dev/null

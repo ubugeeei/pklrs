@@ -1,5 +1,5 @@
-use pklrs::decoder::decode_pkl_binary;
-use pklrs::value::{ObjectMember, PklValue};
+use pklrust::decoder::decode_pkl_binary;
+use pklrust::value::{ObjectMember, PklValue};
 use rmpv::Value;
 
 fn encode_value(v: &Value) -> Vec<u8> {
@@ -153,7 +153,7 @@ fn test_decode_duration() {
     match result {
         PklValue::Duration(d) => {
             assert_eq!(d.value, 5.0);
-            assert_eq!(d.unit, pklrs::DurationUnit::S);
+            assert_eq!(d.unit, pklrust::DurationUnit::S);
         }
         _ => panic!("expected Duration"),
     }
@@ -173,7 +173,7 @@ fn test_decode_data_size() {
     match result {
         PklValue::DataSize(d) => {
             assert_eq!(d.value, 512.0);
-            assert_eq!(d.unit, pklrs::DataSizeUnit::Mb);
+            assert_eq!(d.unit, pklrust::DataSizeUnit::Mb);
         }
         _ => panic!("expected DataSize"),
     }

@@ -1,5 +1,5 @@
 /// Evaluate specific expressions within a module.
-use pklrs::{EvaluatorManager, EvaluatorOptions, ModuleSource};
+use pklrust::{EvaluatorManager, EvaluatorOptions, ModuleSource};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut manager = EvaluatorManager::new()?;

@@ -1,10 +1,10 @@
 [package]
-name = "pklrs-derive"
+name = "pklrust-derive"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
 repository.workspace = true
-description = "Derive macros for pklrs"
+description = "Derive macros for pklrust"
 
 [lib]
 proc-macro = true
